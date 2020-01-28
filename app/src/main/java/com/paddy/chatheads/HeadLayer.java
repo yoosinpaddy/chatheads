@@ -8,10 +8,12 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,6 +34,8 @@ public class HeadLayer extends View {
     private long lastTouchDown;
     WindowManager.LayoutParams params;
     private boolean magnetismApplied = false;
+    private int width;
+    private MoveAnimator animator;
 
     public HeadLayer(Context context) {
         super(context);
@@ -131,11 +135,13 @@ public class HeadLayer extends View {
                         initTouchX = x;
                         initTouchY = y;
                         lastTouchDown = System.currentTimeMillis();
+                        updateSize();
                         mWindowManager.updateViewLayout(mFrameLayout2,params3);
                         v2.setVisibility(VISIBLE);
                         return true;
 
                     case MotionEvent.ACTION_UP:
+                        goToWall();
                         v2.setVisibility(GONE);
                         Log.e(TAG, "onTouch: "+event.getRawY()+" "+a+" "+b);
                         if (System.currentTimeMillis() - lastTouchDown < TOUCH_TIME_THRESHOLD) {
@@ -176,6 +182,63 @@ public class HeadLayer extends View {
         });
     }
 
+
+    public void goToWall() {
+        animator = new MoveAnimator();
+            int middle = width / 2;
+            float nearestXWall = params.x >= middle ? width : 0;
+            animator.start(nearestXWall, params.y);
+        Log.e(TAG, "goToWall: "+params.y);
+
+    }
+    private void updateSize() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        mWindowManager.getDefaultDisplay().getMetrics(metrics);
+        Display display = mWindowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = (size.x - this.getWidth());
+        Log.e(TAG, "updateSize: "+width);
+
+    }
+    private void move(float deltaX, float deltaY) {
+        params.x += deltaX;
+        params.y += deltaY;
+        mWindowManager.updateViewLayout(mFrameLayout, params);
+        Log.e(TAG, "move: "+deltaX+" "+deltaY );
+    }
+    private class MoveAnimator implements Runnable {
+        private Handler handler = new Handler(Looper.getMainLooper());
+        private float destinationX;
+        private float destinationY;
+        private long startingTime;
+
+        private void start(float x, float y) {
+            this.destinationX = x;
+            this.destinationY = y;
+            startingTime = System.currentTimeMillis();
+            handler.post(this);
+        }
+
+        @Override
+        public void run() {
+//            if (getRootView() != null && getRootView().getParent() != null) {
+                float progress = Math.min(1, (System.currentTimeMillis() - startingTime) / 400f);
+                float deltaX = (destinationX -  params.x) * progress;
+                float deltaY = (destinationY -  params.y) * progress;
+                move(deltaX, deltaY);
+                if (progress < 1) {
+                    handler.post(this);
+                }
+                Log.e(TAG, "run1: "+destinationX);
+//            }
+            Log.e(TAG, "run: "+destinationX);
+        }
+
+        private void stop() {
+            handler.removeCallbacks(this);
+        }
+    }
     private boolean checkIfBubbleIsOverTrash() {
         View bubble=mFrameLayout;
         boolean result = false;
