@@ -2,9 +2,6 @@ package com.paddy.chatheads;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.app.Activity;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -18,7 +15,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,9 +23,9 @@ import android.widget.LinearLayout;
 public class HeadLayer extends View {
 
     private Context mContext;
-    private FrameLayout mFrameLayout,mFrameLayout2;
+    private FrameLayout mFrameLayout, mFrameLayout2;
     private WindowManager mWindowManager;
-    String TAG ="HEAD LAYER";
+    String TAG = "HEAD LAYER";
     private static final int TOUCH_TIME_THRESHOLD = 150;
     private long lastTouchDown;
     WindowManager.LayoutParams params;
@@ -63,8 +59,8 @@ public class HeadLayer extends View {
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
         }
-        params.gravity =Gravity.TOP | Gravity.START;
-        final WindowManager.LayoutParams params2,params3;
+        params.gravity = Gravity.TOP | Gravity.START;
+        final WindowManager.LayoutParams params2, params3;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             params2 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
@@ -118,15 +114,17 @@ public class HeadLayer extends View {
         // Support dragging the image view
         final ImageView imageView2 = (ImageView) mFrameLayout2.findViewById(R.id.closeme);
         final ImageView imageView = (ImageView) mFrameLayout.findViewById(R.id.imageView);
-        final LinearLayout xx =  mFrameLayout.findViewById(R.id.xxxx);
-        final View v2= mFrameLayout2.findViewById(R.id.hideme);
-        mWindowManager.updateViewLayout(mFrameLayout2,params2);
+        final LinearLayout xx = mFrameLayout.findViewById(R.id.xxxx);
+        final View v2 = mFrameLayout2.findViewById(R.id.hideme);
+        mWindowManager.updateViewLayout(mFrameLayout2, params2);
         imageView.setOnTouchListener(new OnTouchListener() {
             private int initX, initY;
             private int initTouchX, initTouchY;
-            @Override public boolean onTouch(View v, MotionEvent event) {
-                int x = (int)event.getRawX();
-                int y = (int)event.getRawY();
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int x = (int) event.getRawX();
+                int y = (int) event.getRawY();
 
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -136,28 +134,28 @@ public class HeadLayer extends View {
                         initTouchY = y;
                         lastTouchDown = System.currentTimeMillis();
                         updateSize();
-                        mWindowManager.updateViewLayout(mFrameLayout2,params3);
+                        mWindowManager.updateViewLayout(mFrameLayout2, params3);
                         v2.setVisibility(VISIBLE);
                         return true;
 
                     case MotionEvent.ACTION_UP:
                         goToWall();
                         v2.setVisibility(GONE);
-                        Log.e(TAG, "onTouch: "+event.getRawY()+" "+a+" "+b);
+                        Log.e(TAG, "onTouch: " + event.getRawY() + " " + a + " " + b);
                         if (System.currentTimeMillis() - lastTouchDown < TOUCH_TIME_THRESHOLD) {
                             //TODO click event
-                            Log.e(TAG, "onClick: " );
+                            Log.e(TAG, "onClick: ");
                             mWindowManager.removeView(mFrameLayout);
                             mWindowManager.removeView(mFrameLayout2);
-                                Intent intent = new Intent(getContext(), ChatHeadActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Intent intent = new Intent(getContext(), ChatHeadActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             getContext().startActivity(intent);
                         }
                         if (checkIfBubbleIsOverTrash()) {
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.e(TAG, "run: checking" );
+                                    Log.e(TAG, "run: checking");
                                     mWindowManager.removeView(mFrameLayout);
                                     mWindowManager.removeView(mFrameLayout2);
                                 }
@@ -166,7 +164,7 @@ public class HeadLayer extends View {
                         } else {
                         }
 
-                        mWindowManager.updateViewLayout(mFrameLayout2,params2);
+                        mWindowManager.updateViewLayout(mFrameLayout2, params2);
                         return true;
 
                     case MotionEvent.ACTION_MOVE:
@@ -185,12 +183,13 @@ public class HeadLayer extends View {
 
     public void goToWall() {
         animator = new MoveAnimator();
-            int middle = width / 2;
-            float nearestXWall = params.x >= middle ? width : 0;
-            animator.start(nearestXWall, params.y);
-        Log.e(TAG, "goToWall: "+params.y);
+        int middle = width / 2;
+        float nearestXWall = params.x >= middle ? width : 0;
+        animator.start(nearestXWall, params.y);
+        Log.e(TAG, "goToWall: " + params.y);
 
     }
+
     private void updateSize() {
         DisplayMetrics metrics = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(metrics);
@@ -198,15 +197,17 @@ public class HeadLayer extends View {
         Point size = new Point();
         display.getSize(size);
         width = (size.x - this.getWidth());
-        Log.e(TAG, "updateSize: "+width);
+        Log.e(TAG, "updateSize: " + width);
 
     }
+
     private void move(float deltaX, float deltaY) {
         params.x += deltaX;
         params.y += deltaY;
         mWindowManager.updateViewLayout(mFrameLayout, params);
-        Log.e(TAG, "move: "+deltaX+" "+deltaY );
+        Log.e(TAG, "move: " + deltaX + " " + deltaY);
     }
+
     private class MoveAnimator implements Runnable {
         private Handler handler = new Handler(Looper.getMainLooper());
         private float destinationX;
@@ -223,24 +224,25 @@ public class HeadLayer extends View {
         @Override
         public void run() {
 //            if (getRootView() != null && getRootView().getParent() != null) {
-                float progress = Math.min(1, (System.currentTimeMillis() - startingTime) / 400f);
-                float deltaX = (destinationX -  params.x) * progress;
-                float deltaY = (destinationY -  params.y) * progress;
-                move(deltaX, deltaY);
-                if (progress < 1) {
-                    handler.post(this);
-                }
-                Log.e(TAG, "run1: "+destinationX);
+            float progress = Math.min(1, (System.currentTimeMillis() - startingTime) / 400f);
+            float deltaX = (destinationX - params.x) * progress;
+            float deltaY = (destinationY - params.y) * progress;
+            move(deltaX, deltaY);
+            if (progress < 1) {
+                handler.post(this);
+            }
+            Log.e(TAG, "run1: " + destinationX);
 //            }
-            Log.e(TAG, "run: "+destinationX);
+            Log.e(TAG, "run: " + destinationX);
         }
 
         private void stop() {
             handler.removeCallbacks(this);
         }
     }
+
     private boolean checkIfBubbleIsOverTrash() {
-        View bubble=mFrameLayout;
+        View bubble = mFrameLayout;
         boolean result = false;
         if (mFrameLayout.getVisibility() == View.VISIBLE) {
             View trashContentView = mFrameLayout2.findViewById(R.id.closeme);
@@ -261,13 +263,14 @@ public class HeadLayer extends View {
                     result = true;
                 }
             }
-            Log.e(TAG, "checkIfBubbleIsOverTrash: cl"+trashLeft );
-            Log.e(TAG, "checkIfBubbleIsOverTrash: cr"+trashRight );
-            Log.e(TAG, "checkIfBubbleIsOverTrash: bl"+bubbleLeft );
-            Log.e(TAG, "checkIfBubbleIsOverTrash: br"+bubbleRight );
+            Log.e(TAG, "checkIfBubbleIsOverTrash: cl" + trashLeft);
+            Log.e(TAG, "checkIfBubbleIsOverTrash: cr" + trashRight);
+            Log.e(TAG, "checkIfBubbleIsOverTrash: bl" + bubbleLeft);
+            Log.e(TAG, "checkIfBubbleIsOverTrash: br" + bubbleRight);
         }
         return result;
     }
+
     private View getTrashContent() {
         return mFrameLayout2;
     }
@@ -285,6 +288,7 @@ public class HeadLayer extends View {
             playAnimation(R.animator.bubble_trash_hide_magnetism_animator);
         }
     }
+
     private void playAnimation(int animationResourceId) {
         if (!isInEditMode()) {
             AnimatorSet animator = (AnimatorSet) AnimatorInflater
@@ -293,11 +297,12 @@ public class HeadLayer extends View {
             animator.start();
         }
     }
+
     /**
      * Removes the view from window manager.
      */
     public void destroy() {
-            mWindowManager.removeView(mFrameLayout);
+        mWindowManager.removeView(mFrameLayout);
 
     }
 }
