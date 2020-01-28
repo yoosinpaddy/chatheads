@@ -1,18 +1,16 @@
 package com.paddy.chatheads;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
-import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.nex3z.notificationbadge.NotificationBadge;
@@ -24,10 +22,11 @@ import static com.paddy.chatheads.PermissionChecker.REQUIRED_PERMISSION_REQUEST_
 public class ChatHeadActivity extends AppCompatActivity {
     CircleImageView imageView;
     ViewPager viewPager;
-//    private BubblesManager bubblesManager;
+    //    private BubblesManager bubblesManager;
     private NotificationBadge mBadge;
 
     private com.paddy.chatheads.PermissionChecker mPermissionChecker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +52,7 @@ public class ChatHeadActivity extends AppCompatActivity {
             }
         });
         mPermissionChecker = new PermissionChecker(ChatHeadActivity.this);
-        if(!mPermissionChecker.isRequiredPermissionGranted()){
+        if (!mPermissionChecker.isRequiredPermissionGranted()) {
             Intent intent = mPermissionChecker.createRequiredPermissionIntent();
             startActivityForResult(intent, REQUIRED_PERMISSION_REQUEST_CODE);
         } else {
