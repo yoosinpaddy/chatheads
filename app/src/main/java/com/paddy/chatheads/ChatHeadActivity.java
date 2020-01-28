@@ -67,6 +67,7 @@ public class ChatHeadActivity extends AppCompatActivity {
             }
         } else {
             Log.d(TAG, "checkPermission: granted");
+            //
         }
     }
 
