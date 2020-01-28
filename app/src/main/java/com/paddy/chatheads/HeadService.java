@@ -5,19 +5,15 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 
 public class HeadService extends Service {
     private final static int FOREGROUND_ID = 999;
@@ -38,7 +34,7 @@ public class HeadService extends Service {
 
         PendingIntent pendingIntent = createPendingIntent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            addNotification(getText(R.string.notificationTitle).toString(),getText(R.string.notificationText).toString(),false,112);
+            addNotification(getText(R.string.notificationTitle).toString(), getText(R.string.notificationText).toString(), false, 112);
             Notification notification = createNotification(pendingIntent);
             startForeground(FOREGROUND_ID, notification);
         }
@@ -60,7 +56,7 @@ public class HeadService extends Service {
     }
 
     private void destroyHeadLayer() {
-        if (mHeadLayer!=null){
+        if (mHeadLayer != null) {
 
             mHeadLayer.destroy();
             mHeadLayer = null;
@@ -77,12 +73,12 @@ public class HeadService extends Service {
         String CHANNEL_ID = "my_channel_";
         CharSequence name = "my_channel";
         String Description = "This is my channel";
-            return new Notification.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getText(R.string.notificationTitle))
-                    .setContentText(getText(R.string.notificationText))
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentIntent(intent)
-                    .build();
+        return new Notification.Builder(this, CHANNEL_ID)
+                .setContentTitle(getText(R.string.notificationTitle))
+                .setContentText(getText(R.string.notificationText))
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentIntent(intent)
+                .build();
 
     }
 
@@ -97,9 +93,9 @@ public class HeadService extends Service {
         final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-            if (!is){
-                small="Running";
-                big="Checking messages";
+            if (!is) {
+                small = "Running2";
+                big = "Checking messages";
 
                 int importance = NotificationManager.IMPORTANCE_HIGH;
                 NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
@@ -114,7 +110,7 @@ public class HeadService extends Service {
 //                startForeground(NOTIFICATION_ID,mChannel);
                 }
 ////                Log.e(TAG, "addNotification: -1");
-            }else{
+            } else {
 
                 int importance = NotificationManager.IMPORTANCE_HIGH;
                 NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
@@ -122,7 +118,7 @@ public class HeadService extends Service {
                 mChannel.enableLights(true);
                 mChannel.setLightColor(Color.RED);
                 mChannel.enableVibration(false);
-                mChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),null);
+                mChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), null);
                 mChannel.setShowBadge(true);
 
                 //Log.e("second","second called");
@@ -134,13 +130,14 @@ public class HeadService extends Service {
             }
 
         }
-        if (!is){
-            small="Running";
-            big="Checking messages";
+        if (!is) {
+            small = "Running";
+            big = "Checking messages";
         }
 
 
     }
+
     private void logServiceStarted() {
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
     }
