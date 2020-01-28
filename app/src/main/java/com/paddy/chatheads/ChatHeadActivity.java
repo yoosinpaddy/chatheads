@@ -58,7 +58,7 @@ public class ChatHeadActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUIRED_PERMISSION_REQUEST_CODE);
         } else {
         }
-        //Check permission
+        //Check permissio
         if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(ChatHeadActivity.this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
