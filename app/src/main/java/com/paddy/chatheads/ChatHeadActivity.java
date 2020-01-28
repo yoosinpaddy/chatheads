@@ -21,6 +21,7 @@ public class ChatHeadActivity extends AppCompatActivity {
 //    private BubblesManager bubblesManager;
     private NotificationBadge mBadge;
 
+    private com.paddy.chatheads.PermissionChecker mPermissionChecker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,12 @@ public class ChatHeadActivity extends AppCompatActivity {
 //                finish();
             }
         });
+        mPermissionChecker = new PermissionChecker(ChatHeadActivity.this);
+        if(!mPermissionChecker.isRequiredPermissionGranted()){
+            Intent intent = mPermissionChecker.createRequiredPermissionIntent();
+            startActivityForResult(intent, com.paddy.chatheads.PermissionChecker.REQUIRED_PERMISSION_REQUEST_CODE);
+        } else {
+        }
 
         // Find the view pager that will allow the user to swipe between fragments
         viewPager = findViewById(R.id.my2viewpager);
