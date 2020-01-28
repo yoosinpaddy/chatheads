@@ -223,7 +223,7 @@ public class HeadLayer extends View {
 
         @Override
         public void run() {
-//            if (getRootView() != null && getRootView().getParent() != null) {
+            if (mFrameLayout != null && mFrameLayout.getParent() != null) {
             float progress = Math.min(1, (System.currentTimeMillis() - startingTime) / 400f);
             float deltaX = (destinationX - params.x) * progress;
             float deltaY = (destinationY - params.y) * progress;
@@ -232,7 +232,7 @@ public class HeadLayer extends View {
                 handler.post(this);
             }
             Log.e(TAG, "run1: " + destinationX);
-//            }
+            }
             Log.e(TAG, "run: " + destinationX);
         }
 
