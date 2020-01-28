@@ -60,9 +60,16 @@ public class HeadLayer extends View {
                     PixelFormat.TRANSLUCENT);
         }
         params.gravity =Gravity.TOP | Gravity.START;
-        final WindowManager.LayoutParams params2;
+        final WindowManager.LayoutParams params2,params3;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             params2 = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
+
+            params3 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
@@ -70,6 +77,12 @@ public class HeadLayer extends View {
                     PixelFormat.TRANSLUCENT);
         } else {
             params2 = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_PHONE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
+            params3 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_PHONE,
@@ -88,7 +101,7 @@ public class HeadLayer extends View {
 //        int y = location[1];
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        mWindowManager.addView(mFrameLayout2, params2);
+        mWindowManager.addView(mFrameLayout2, params3);
         mWindowManager.addView(mFrameLayout, params);
         final int a = params.width;
         final int b = params.height;
@@ -103,6 +116,7 @@ public class HeadLayer extends View {
         final ImageView imageView = (ImageView) mFrameLayout.findViewById(R.id.imageView);
         final LinearLayout xx =  mFrameLayout.findViewById(R.id.xxxx);
         final View v2= mFrameLayout2.findViewById(R.id.hideme);
+        mWindowManager.updateViewLayout(mFrameLayout2,params2);
         imageView.setOnTouchListener(new OnTouchListener() {
             private int initX, initY;
             private int initTouchX, initTouchY;
@@ -112,20 +126,20 @@ public class HeadLayer extends View {
 
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        v2.setVisibility(VISIBLE);
                         initX = params.x;
                         initY = params.y;
                         initTouchX = x;
                         initTouchY = y;
                         lastTouchDown = System.currentTimeMillis();
-//                        xx.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+                        mWindowManager.updateViewLayout(mFrameLayout2,params3);
+                        v2.setVisibility(VISIBLE);
                         return true;
 
                     case MotionEvent.ACTION_UP:
                         v2.setVisibility(GONE);
                         Log.e(TAG, "onTouch: "+event.getRawY()+" "+a+" "+b);
                         if (System.currentTimeMillis() - lastTouchDown < TOUCH_TIME_THRESHOLD) {
-
+                            //TODO click event
                             Log.e(TAG, "onClick: " );
     //                            Intent intent = new Intent(getContext(), MainActivity.class);
     //                            ((Activity)getContext()).startActivity(intent);
@@ -142,6 +156,8 @@ public class HeadLayer extends View {
 
                         } else {
                         }
+
+                        mWindowManager.updateViewLayout(mFrameLayout2,params2);
                         return true;
 
                     case MotionEvent.ACTION_MOVE:
