@@ -68,7 +68,7 @@ public class HeadService extends Service {
     }
 
     private PendingIntent createPendingIntent() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ChatHeadActivity.class);
         return PendingIntent.getActivity(this, 0, intent, 0);
     }
 
@@ -138,37 +138,6 @@ public class HeadService extends Service {
             small="Running";
             big="Checking messages";
         }
-//        Intent resultIntent = new Intent(this, MainActivity.class);
-//        resultIntent.putExtra("get_fragment","myrequests");
-//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-//        stackBuilder.addParentStack(MainActivity.class);
-//        stackBuilder.addNextIntent(resultIntent);
-//        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setContentTitle("Bykee")
-//                .setContentText(small)
-//                .setStyle(new NotificationCompat.BigTextStyle().bigText(big))
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setContentIntent(resultPendingIntent)
-//                .setAutoCancel(true)
-//                .setColor(getResources().getColor(android.R.color.holo_red_dark));
-//
-//        if (notificationManager != null) {
-//
-//            startForeground(NOTIFICATION_ID, builder.build());
-//        }
-//
-//        if (!is){
-//            if (notificationManager != null) {
-//                notificationManager.cancel(NOTIFICATION_ID);
-//                Log.e(TAG, "addNotification: 12 "+is);
-//            }
-//        }else {
-//
-//            Log.e(TAG, "addNotification: 12 "+is);
-//        }
 
 
     }

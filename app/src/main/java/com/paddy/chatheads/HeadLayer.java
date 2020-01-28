@@ -141,8 +141,11 @@ public class HeadLayer extends View {
                         if (System.currentTimeMillis() - lastTouchDown < TOUCH_TIME_THRESHOLD) {
                             //TODO click event
                             Log.e(TAG, "onClick: " );
-    //                            Intent intent = new Intent(getContext(), MainActivity.class);
-    //                            ((Activity)getContext()).startActivity(intent);
+                            mWindowManager.removeView(mFrameLayout);
+                            mWindowManager.removeView(mFrameLayout2);
+                                Intent intent = new Intent(getContext(), ChatHeadActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getContext().startActivity(intent);
                         }
                         if (checkIfBubbleIsOverTrash()) {
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
