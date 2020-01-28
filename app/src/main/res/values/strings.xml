@@ -12,5 +12,6 @@
     <!-- Notification -->
     <string name="notificationTitle">Head service</string>
     <string name="notificationText">Tap to configure.</string>
+    <string name="close">close</string>
 
 </resources>
