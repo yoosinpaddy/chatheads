@@ -16,9 +16,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 public class HeadLayer extends View {
 
@@ -62,14 +64,14 @@ public class HeadLayer extends View {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             params2 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
         } else {
             params2 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_PHONE,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
@@ -99,16 +101,8 @@ public class HeadLayer extends View {
         // Support dragging the image view
         final ImageView imageView2 = (ImageView) mFrameLayout2.findViewById(R.id.closeme);
         final ImageView imageView = (ImageView) mFrameLayout.findViewById(R.id.imageView);
+        final LinearLayout xx =  mFrameLayout.findViewById(R.id.xxxx);
         final View v2= mFrameLayout2.findViewById(R.id.hideme);
-        imageView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Log.e(TAG, "onClick: " );
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                ((Activity)getContext()).startActivity(intent);
-
-            }
-        });
         imageView.setOnTouchListener(new OnTouchListener() {
             private int initX, initY;
             private int initTouchX, initTouchY;
@@ -124,6 +118,7 @@ public class HeadLayer extends View {
                         initTouchX = x;
                         initTouchY = y;
                         lastTouchDown = System.currentTimeMillis();
+//                        xx.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
                         return true;
 
                     case MotionEvent.ACTION_UP:
@@ -140,8 +135,8 @@ public class HeadLayer extends View {
                                 @Override
                                 public void run() {
                                     Log.e(TAG, "run: checking" );
-//                                    mWindowManager.removeView(mFrameLayout);
-//                                    mWindowManager.removeView(mFrameLayout2);
+                                    mWindowManager.removeView(mFrameLayout);
+                                    mWindowManager.removeView(mFrameLayout2);
                                 }
                             });
 
@@ -166,7 +161,7 @@ public class HeadLayer extends View {
         View bubble=mFrameLayout;
         boolean result = false;
         if (mFrameLayout.getVisibility() == View.VISIBLE) {
-            View trashContentView = mFrameLayout2;
+            View trashContentView = mFrameLayout2.findViewById(R.id.closeme);
             int trashWidth = trashContentView.getMeasuredWidth();
             int trashHeight = trashContentView.getMeasuredHeight();
             int trashLeft = (trashContentView.getLeft() - (trashWidth / 2));
@@ -220,7 +215,8 @@ public class HeadLayer extends View {
      * Removes the view from window manager.
      */
     public void destroy() {
-        mWindowManager.removeView(mFrameLayout);
+            mWindowManager.removeView(mFrameLayout);
+
     }
 }
 
