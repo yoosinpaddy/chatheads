@@ -62,14 +62,14 @@ public class HeadLayer extends View {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             params2 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
         } else {
             params2 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_PHONE,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
@@ -99,6 +99,7 @@ public class HeadLayer extends View {
         // Support dragging the image view
         final ImageView imageView2 = (ImageView) mFrameLayout2.findViewById(R.id.closeme);
         final ImageView imageView = (ImageView) mFrameLayout.findViewById(R.id.imageView);
+        final View v2= mFrameLayout2.findViewById(R.id.hideme);
         imageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -117,7 +118,7 @@ public class HeadLayer extends View {
 
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        imageView2.setVisibility(VISIBLE);
+                        v2.setVisibility(VISIBLE);
                         initX = params.x;
                         initY = params.y;
                         initTouchX = x;
@@ -126,7 +127,7 @@ public class HeadLayer extends View {
                         return true;
 
                     case MotionEvent.ACTION_UP:
-//                        imageView2.setVisibility(GONE);
+                        v2.setVisibility(GONE);
                         Log.e(TAG, "onTouch: "+event.getRawY()+" "+a+" "+b);
                         if (System.currentTimeMillis() - lastTouchDown < TOUCH_TIME_THRESHOLD) {
 
